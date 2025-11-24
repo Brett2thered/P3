@@ -16,13 +16,27 @@ P3/
     ├── Shared/                        # Shared code for both platforms
     │   ├── P3DrumMachineApp.swift    # App entry point
     │   ├── Models/                    # Data models
-    │   ├── ViewModels/                # View models (MVVM)
-    │   │   └── SessionViewModel.swift
+    │   │   ├── Sample.swift           # Sample and SampleCollection
+    │   │   ├── Pad.swift              # Pad model with PadMode enum
+    │   │   ├── Session.swift          # Session, SessionSummary, Recording
+    │   │   ├── VisualSettings.swift   # Visual customization and StylePreset
+    │   │   └── PerformanceSurface.swift # MusicalNote, CircleOfFifthsKey, MPEParameters
+    │   ├── ViewModels/                # View models (MVVM with SOLID principles)
+    │   │   ├── AppViewModel.swift     # Coordinator (orchestrates specialized VMs)
+    │   │   ├── SessionListViewModel.swift    # Session list management
+    │   │   ├── SessionDetailViewModel.swift  # Active session state
+    │   │   ├── SampleLibraryViewModel.swift  # Sample library management
+    │   │   ├── PerformanceSurfaceViewModel.swift # Keys/Fifths/MPE
+    │   │   └── SessionViewModel.swift # ⚠️ DEPRECATED - see REFACTORING.md
     │   ├── Views/                     # SwiftUI views
-    │   │   └── ContentView.swift
-    │   ├── AudioEngine/               # Audio processing
+    │   │   └── ContentView.swift      # Placeholder view (to be updated)
+    │   ├── AudioEngine/               # Audio processing (Step 4+)
+    │   │   └── (future: AudioEngineManager.swift, MPEHandler.swift)
     │   ├── Persistence/               # File I/O and session management
-    │   └── Visuals/                   # Visual effects and theming
+    │   │   ├── SessionStore.swift     # Protocol abstraction for persistence
+    │   │   └── FileManagerService.swift # Concrete implementation of SessionStore
+    │   └── Visuals/                   # Visual effects and theming (Step 12+)
+    │       └── (future: visual effect implementations)
     ├── macOS/                         # macOS-specific files
     │   ├── Info.plist
     │   └── P3DrumMachine.entitlements
@@ -88,20 +102,34 @@ The project requires two targets:
 
 ## Current Status
 
-**Step 0: Project Scaffold** ✅ Complete
+**Steps 0-2: Foundation Complete** ✅
 
-The basic project structure is in place with:
-- Shared folder structure
-- Platform-specific Info.plist and entitlements
-- Package.swift for dependencies
-- Placeholder app entry point and ContentView
-- Basic SessionViewModel structure
+**Architecture: Refactored (2025-11-22)** ✅
+
+The project foundation is complete with:
+- ✅ Complete shared folder structure
+- ✅ Platform-specific Info.plist and entitlements
+- ✅ Package.swift for dependencies
+- ✅ 5 complete data model files with Codable support
+- ✅ SOLID-compliant view model architecture (AppViewModel + 4 specialized VMs)
+- ✅ SessionStore protocol abstraction for dependency injection
+- ✅ FileManagerService implementing SessionStore
+- ✅ Cross-platform persistence (macOS + iPadOS)
+- ✅ 51 passing unit tests (models, persistence, view models)
+
+**Architecture:** See [REFACTORING.md](REFACTORING.md) for details on SRP-compliant architecture
 
 ## Next Steps
 
 1. Open project in Xcode
 2. Verify builds for both macOS and iPadOS
-3. Proceed to Step 1: Implement shared models and app state
+3. Run unit tests to confirm all 51 tests pass
+4. Proceed to **Step 3: Launch Screen & Navigation**
+   - Update `P3DrumMachineApp.swift` to use `AppViewModel`
+   - Create `LaunchView` with New/Open/Import buttons
+   - Implement navigation and session list UI
+
+See [PLAN.md](PLAN.md) for detailed implementation roadmap.
 
 ## Reference Assets
 

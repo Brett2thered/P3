@@ -31,7 +31,7 @@ Building a SwiftUI multiplatform drum machine/looper/pad+keys app for macOS and 
 - **Date:** 2025-11-22
 - **Description:** Created this planning document to track implementation progress
 - **Files Created:**
-  - `/Users/b/Documents/cld_ppl/P3/PLAN.md`
+  - `PLAN.md`
 - **Notes:** Will update after each step with implementation details
 
 #### Step 0: Multiplatform Project Scaffold
@@ -39,16 +39,16 @@ Building a SwiftUI multiplatform drum machine/looper/pad+keys app for macOS and 
 - **Date:** 2025-11-22
 - **Description:** Created complete SwiftUI multiplatform project structure
 - **Files Created:**
-  - `/Users/b/Documents/cld_ppl/P3/Package.swift` - SPM configuration with Phosphor Icons
-  - `/Users/b/Documents/cld_ppl/P3/PROJECT_STRUCTURE.md` - Project documentation
-  - `/Users/b/Documents/cld_ppl/P3/P3DrumMachine/Shared/P3DrumMachineApp.swift` - App entry point
-  - `/Users/b/Documents/cld_ppl/P3/P3DrumMachine/Shared/Views/ContentView.swift` - Placeholder view
-  - `/Users/b/Documents/cld_ppl/P3/P3DrumMachine/Shared/ViewModels/SessionViewModel.swift` - View model skeleton
-  - `/Users/b/Documents/cld_ppl/P3/P3DrumMachine/macOS/Info.plist` - macOS configuration
-  - `/Users/b/Documents/cld_ppl/P3/P3DrumMachine/macOS/P3DrumMachine.entitlements` - macOS entitlements
-  - `/Users/b/Documents/cld_ppl/P3/P3DrumMachine/iOS/Info.plist` - iOS/iPadOS configuration
-  - `/Users/b/Documents/cld_ppl/P3/P3DrumMachine/iOS/P3DrumMachine.entitlements` - iOS entitlements
-  - `/Users/b/Documents/cld_ppl/P3/P3DrumMachine/Assets.xcassets/` - Asset catalog structure
+  - `Package.swift` - SPM configuration with Phosphor Icons
+  - `PROJECT_STRUCTURE.md` - Project documentation
+  - `P3DrumMachine/Shared/P3DrumMachineApp.swift` - App entry point
+  - `P3DrumMachine/Shared/Views/ContentView.swift` - Placeholder view
+  - `P3DrumMachine/Shared/ViewModels/SessionViewModel.swift` - View model skeleton
+  - `P3DrumMachine/macOS/Info.plist` - macOS configuration
+  - `P3DrumMachine/macOS/P3DrumMachine.entitlements` - macOS entitlements
+  - `P3DrumMachine/iOS/Info.plist` - iOS/iPadOS configuration
+  - `P3DrumMachine/iOS/P3DrumMachine.entitlements` - iOS entitlements
+  - `P3DrumMachine/Assets.xcassets/` - Asset catalog structure
 - **Folders Created:**
   - `P3DrumMachine/Shared/Models/` - Data models directory
   - `P3DrumMachine/Shared/ViewModels/` - View models directory
@@ -90,15 +90,16 @@ Building a SwiftUI multiplatform drum machine/looper/pad+keys app for macOS and 
 #### Step 1: Shared Models & App State
 - **Status:** ✅ Complete
 - **Date:** 2025-11-22
-- **Description:** Implemented complete data model layer with full Codable support and comprehensive SessionViewModel
+- **Description:** Implemented complete data model layer with full Codable support and initial view model implementation
+- **Architecture Note:** ⚠️ The original SessionViewModel was later refactored on 2025-11-22 into AppViewModel + specialized view models to comply with Single Responsibility Principle. See [REFACTORING.md](REFACTORING.md) for details.
 - **Files Created:**
-  - `/Users/b/Documents/cld_ppl/P3/P3DrumMachine/Shared/Models/Sample.swift` - Sample and SampleCollection models
-  - `/Users/b/Documents/cld_ppl/P3/P3DrumMachine/Shared/Models/Pad.swift` - Pad model with all modes
-  - `/Users/b/Documents/cld_ppl/P3/P3DrumMachine/Shared/Models/VisualSettings.swift` - Visual customization with StylePreset
-  - `/Users/b/Documents/cld_ppl/P3/P3DrumMachine/Shared/Models/Session.swift` - Session, SessionSummary, Recording models
-  - `/Users/b/Documents/cld_ppl/P3/P3DrumMachine/Shared/Models/PerformanceSurface.swift` - MusicalNote, CircleOfFifthsKey, MPEParameters
-  - `/Users/b/Documents/cld_ppl/P3/P3DrumMachine/Shared/ViewModels/SessionViewModel.swift` - Complete view model (updated)
-  - `/Users/b/Documents/cld_ppl/P3/P3DrumMachineTests/ModelTests.swift` - Comprehensive unit tests
+  - `P3DrumMachine/Shared/Models/Sample.swift` - Sample and SampleCollection models
+  - `P3DrumMachine/Shared/Models/Pad.swift` - Pad model with all modes
+  - `P3DrumMachine/Shared/Models/VisualSettings.swift` - Visual customization with StylePreset
+  - `P3DrumMachine/Shared/Models/Session.swift` - Session, SessionSummary, Recording models
+  - `P3DrumMachine/Shared/Models/PerformanceSurface.swift` - MusicalNote, CircleOfFifthsKey, MPEParameters
+  - `P3DrumMachine/Shared/ViewModels/SessionViewModel.swift` - Initial view model (now deprecated - see REFACTORING.md)
+  - `P3DrumMachineTests/ModelTests.swift` - Comprehensive unit tests
 - **What Was Done:**
   1. **Sample Model:** Codable sample with ID, name, fileURL, duration, waveform data
   2. **SampleCollection Model:** Collection management with add/remove/replace operations
@@ -119,15 +120,10 @@ Building a SwiftUI multiplatform drum machine/looper/pad+keys app for macOS and 
      - MusicalNote: MIDI note mapping, frequency calculation, pitch shifting
      - CircleOfFifthsKey: 12-key circle with major/minor modes
      - MPEParameters: pitch bend, pressure, timbre
-  7. **SessionViewModel:** Full implementation with 18 methods:
-     - Session management: new, open, save, delete, close
-     - Pad management: get, update, assign, set mode
-     - Grid resizing: dynamic row/column adjustment
-     - BPM control: set, adjust, 16th note duration calculation
-     - Performance surface: show/hide/toggle Keys and Fifths
-     - Sample library: add, remove, create collection, import
-     - Visual settings: update, tint, brightness, style preset
-     - Recording: start/stop (stub for Step 13)
+  7. **Initial SessionViewModel:** First implementation with 18 methods (later refactored):
+     - ⚠️ Note: This monolithic view model was refactored on 2025-11-22 to comply with SOLID principles
+     - Current architecture uses AppViewModel + 4 specialized view models (see REFACTORING.md)
+     - Original responsibilities included: session management, pad operations, BPM control, performance surfaces, sample library, visual settings, and recording stubs
   8. **Unit Tests:** 18 test methods covering:
      - Sample encode/decode and hashable
      - Pad encode/decode and isEmpty check
@@ -147,7 +143,7 @@ Building a SwiftUI multiplatform drum machine/looper/pad+keys app for macOS and 
   - BPM synchronized between SessionViewModel and Session
 - **Model Architecture:**
   ```
-  Session
+  Session (Data Model)
   ├── Pads [Pad]
   │   ├── Sample (optional)
   │   ├── PadMode
@@ -156,11 +152,12 @@ Building a SwiftUI multiplatform drum machine/looper/pad+keys app for macOS and 
   │   └── StylePreset
   └── Recordings [Recording]
 
-  SessionViewModel
-  ├── currentSession
-  ├── sampleLibrary [SampleCollection]
-  ├── activePerformanceSurface
-  └── Methods for all operations
+  Current Architecture (Refactored - see REFACTORING.md):
+  AppViewModel (Coordinator)
+  ├── SessionListViewModel → Session list management
+  ├── SessionDetailViewModel → Active session state, pads, BPM
+  ├── SampleLibraryViewModel → Sample library management
+  └── PerformanceSurfaceViewModel → Keys/Fifths/MPE
   ```
 - **Acceptance Criteria:** ✅ Met
   - ✅ All models implement Codable
@@ -175,13 +172,15 @@ Building a SwiftUI multiplatform drum machine/looper/pad+keys app for macOS and 
 - **Status:** ✅ Complete
 - **Date:** 2025-11-22
 - **Description:** Implemented complete file-based persistence system with cross-platform support for macOS and iPadOS
+- **Architecture Note:** ⚠️ FileManagerService was later refactored on 2025-11-22 to implement the SessionStore protocol for dependency injection. The singleton pattern was replaced with protocol-based dependency injection. See [REFACTORING.md](REFACTORING.md) for details.
 - **Files Created:**
-  - `/Users/b/Documents/cld_ppl/P3/P3DrumMachine/Shared/Persistence/FileManagerService.swift` - Complete file management service
-  - `/Users/b/Documents/cld_ppl/P3/P3DrumMachineTests/PersistenceTests.swift` - Comprehensive persistence tests
+  - `P3DrumMachine/Shared/Persistence/FileManagerService.swift` - File management service (now implements SessionStore protocol)
+  - `P3DrumMachine/Shared/Persistence/SessionStore.swift` - Protocol abstraction (added during refactoring)
+  - `P3DrumMachineTests/PersistenceTests.swift` - Comprehensive persistence tests
 - **Files Updated:**
-  - `/Users/b/Documents/cld_ppl/P3/P3DrumMachine/Shared/ViewModels/SessionViewModel.swift` - Integrated FileManagerService
+  - `P3DrumMachine/Shared/ViewModels/SessionViewModel.swift` - Integrated with persistence (now deprecated)
 - **What Was Done:**
-  1. **FileManagerService:** Complete singleton service with platform-agnostic file operations
+  1. **FileManagerService:** Initially implemented as singleton, later refactored to implement SessionStore protocol for dependency injection
      - Base directory handling (Application Support on macOS, Documents on iOS)
      - Automatic directory structure creation (Sessions/, Samples/, Recordings/)
      - Session CRUD operations: save, load, list, delete, exists check
@@ -225,7 +224,8 @@ Building a SwiftUI multiplatform drum machine/looper/pad+keys app for macOS and 
      - Recording file management
      - SessionViewModel integration (save, load, delete, list)
 - **Technical Decisions:**
-  - Singleton pattern for FileManagerService (shared instance)
+  - ⚠️ Architecture refactored on 2025-11-22: FileManagerService now implements SessionStore protocol
+  - Dependency injection via SessionStore protocol (replaces singleton pattern)
   - Platform-specific directory selection (#if os(macOS) / #else)
   - JSON for session persistence (human-readable, debuggable)
   - Atomic writes to prevent corruption
@@ -252,16 +252,17 @@ Building a SwiftUI multiplatform drum machine/looper/pad+keys app for macOS and 
       └── ...
   ```
 - **Acceptance Criteria:** ✅ Met
-  - ✅ FileManagerService fully implemented
+  - ✅ FileManagerService fully implemented (now with SessionStore protocol)
   - ✅ Directory structure auto-created on both platforms
   - ✅ Sessions can be saved and loaded
   - ✅ Sessions list populated from disk
   - ✅ Sessions can be deleted with cleanup
   - ✅ Audio files can be imported
-  - ✅ SessionViewModel integrated with persistence
-  - ✅ 13 passing unit tests
+  - ✅ Persistence integrated with view models via protocol abstraction
+  - ✅ 13 passing unit tests + 20 additional tests with mock SessionStore
   - ✅ Error handling throughout
   - ✅ Works on macOS and iPadOS
+  - ✅ Dependency injection enables testing and flexibility
 
 ---
 
@@ -464,7 +465,27 @@ None currently.
 ---
 
 ## Next Steps
-1. Begin Step 0: Create Xcode multiplatform project
-2. Set up folder structure
-3. Add dependencies (Phosphor Icons)
-4. Verify builds on both platforms
+
+### Immediate Next Step: Step 3 - Launch Screen & Navigation
+
+With the foundation complete (Steps 0-2) and architecture refactored to SOLID principles, the next step is implementing the UI layer:
+
+1. **Update App Entry Point:**
+   - Modify `P3DrumMachineApp.swift` to use `AppViewModel` (coordinator pattern)
+   - Replace deprecated `SessionViewModel` with new architecture
+
+2. **Implement Launch Screen:**
+   - Create `LaunchView` with New/Open/Import buttons
+   - Implement navigation to `SessionView`
+   - Create `SessionListView` for browsing existing sessions
+
+3. **File Import:**
+   - Add `.fileImporter` modifier for audio file selection
+   - Wire up to `SampleLibraryViewModel.importAudioFile()`
+
+4. **Verify:**
+   - Test navigation flow on both macOS and iPadOS
+   - Ensure session creation, opening, and audio import work
+   - Run all 51 unit tests to ensure no regressions
+
+See **Step 3** in the Pending Steps section above for detailed acceptance criteria.
